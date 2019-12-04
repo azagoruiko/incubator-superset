@@ -32,37 +32,42 @@ RUN apt-get install -y apt-transport-https apt-utils
 RUN apt-get install -y build-essential libssl-dev \
     libffi-dev python3-dev libsasl2-dev libldap2-dev libxi-dev
 
+# Install extra useful tool for development
+RUN apt-get install -y vim less postgresql-client redis-tools mysql-client
+
 # Install nodejs for custom build
 # https://superset.incubator.apache.org/installation.html#making-your-own-build
 # https://nodejs.org/en/download/package-manager/
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y nodejs
 
-RUN mkdir -p /home/superset
-RUN chown superset /home/superset
-
 WORKDIR /home/superset
-ARG VERSION
 
-# Can fetch source from svn or copy tarball from local mounted directory
-RUN svn co https://dist.apache.org/repos/dist/dev/incubator/superset/$VERSION ./
-RUN tar -xvf *.tar.gz
-WORKDIR apache-superset-incubating-$VERSION
+COPY requirements.txt .
+COPY requirements-dev.txt .
+COPY contrib/docker/requirements-extra.txt .
+
+RUN pip --default-timeout=120 install --upgrade setuptools pip \
+    && pip --default-timeout=120 install -r requirements.txt -r requirements-dev.txt -r requirements-extra.txt \
+    && rm -rf /root/.cache/pip
+
+COPY --chown=superset:superset superset superset
+
+ENV PATH=/home/superset/superset/bin:$PATH \
+    PYTHONPATH=/home/superset/superset/:$PYTHONPATH
+
+USER superset
 
 RUN cd superset/assets \
     && npm ci \
     && npm run build \
     && rm -rf node_modules
 
-
-WORKDIR /home/superset/apache-superset-incubating-$VERSION
-RUN pip install --upgrade setuptools pip \
-    && pip install -r requirements.txt \
-    && pip install --no-cache-dir .
-
-RUN flask fab babel-compile --target superset/translations
-
-ENV PATH=/home/superset/superset/bin:$PATH \
-    PYTHONPATH=/home/superset/superset/:$PYTHONPATH
-COPY from_tarball_entrypoint.sh /entrypoint.sh
+COPY contrib/docker/superset_config.py /home/superset/superset/superset_config.py
+COPY contrib/docker/docker-init.sh .
+COPY contrib/docker/docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+HEALTHCHECK CMD ["curl", "-f", "http://localhost:8088/health"]
+
+EXPOSE 8088
