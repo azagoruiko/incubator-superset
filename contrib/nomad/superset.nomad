@@ -59,7 +59,7 @@ EOH
       }
 
       service {
-        name = "notebooks-service"
+        name = "superset-service"
         port = "web"
         tags = ["urlprefix-/superset strip=/superset"]
 
