@@ -75,12 +75,13 @@ COPY --from=superset-py /app/apache_superset.egg-info /app/apache_superset.egg-i
 COPY --from=superset-node /app/superset/assets /app/superset/assets
 
 COPY ./docker/docker-entrypoint.sh /usr/bin/
+COPY ./docker/docker-init.sh /usr/bin/
 
 WORKDIR /app
 
 USER superset
 
-HEALTHCHECK CMD ["curl", "-f", "http://localhost:8088/health"]
+#HEALTHCHECK CMD ["curl", "-f", "http://localhost:8088/health"]
 
 EXPOSE ${SUPERSET_PORT}
 

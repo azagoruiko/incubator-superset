@@ -16,12 +16,12 @@ job "superset-job" {
       driver = "docker"
       env {
         POSTGRES_DB="superset"
-
         POSTGRES_HOST="192.168.0.21"
         POSTGRES_PORT=5432
         REDIS_HOST="192.168.0.21"
         REDIS_PORT=6379
         SUPERSET_ENV="production"
+        SUPERSET_PORT=8088
       }
       template {
         data = <<EOH
@@ -32,7 +32,7 @@ EOH
         env = true
       }
       config {
-        image = "127.0.0.1:9999/docker/superset:0.0.3"
+        image = "127.0.0.1:9999/docker/superset:0.0.9"
         privileged = true
         args = [
         ]
@@ -66,7 +66,7 @@ EOH
         check {
           type     = "http"
           path     = "/health"
-          interval = "10s"
+          interval = "20s"
           timeout  = "2s"
         }
       }
