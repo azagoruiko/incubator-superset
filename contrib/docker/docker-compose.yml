@@ -18,17 +18,17 @@ version: '2'
 services:
 
 
-  postgres:
-    image: postgres:10
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: superset
-      POSTGRES_PASSWORD: superset
-      POSTGRES_USER: superset
-    ports:
-      - "127.0.0.1:5432:5432"
-    volumes:
-      - postgres:/var/lib/postgresql/data
+#  postgres:
+#    image: postgres:10
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_DB: superset
+#      POSTGRES_PASSWORD: zasada
+#      POSTGRES_USER: superset
+#    ports:
+#      - "127.0.0.1:5432:5432"
+#    volumes:
+#      - postgres:/var/lib/postgresql/data
 
   superset:
     build:
@@ -49,9 +49,9 @@ services:
     user: root:root
     ports:
       - 8088:8088
-    depends_on:
-      - postgres
-      - redis
+    #depends_on:
+    #  - postgres
+    #  - redis
     volumes:
       # this is needed to communicate with the postgres and redis services
       - ./superset_config.py:/home/superset/superset/superset_config.py

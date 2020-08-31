@@ -76,6 +76,8 @@ COPY --from=superset-node /app/superset/assets /app/superset/assets
 
 COPY ./docker/docker-entrypoint.sh /usr/bin/
 COPY ./docker/docker-init.sh /usr/bin/
+COPY ./docker/pythonpath_dev/superset_config.py ${PYTHONPATH}/
+COPY ./docker/pythonpath_dev/superset_config.py /app/
 
 WORKDIR /app
 
