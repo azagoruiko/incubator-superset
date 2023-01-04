@@ -2,6 +2,10 @@ job "superset-job" {
   datacenters = ["home"]
   type        = "service"
 
+  constraint {
+    attribute = "${node.class}"
+    value = "guestworker"
+  }
   group "superset-group" {
     count = 1
 
@@ -16,9 +20,9 @@ job "superset-job" {
       driver = "docker"
       env {
         POSTGRES_DB="superset"
-        POSTGRES_HOST="192.168.0.21"
+        POSTGRES_HOST="10.8.0.5"
         POSTGRES_PORT=5432
-        REDIS_HOST="192.168.0.21"
+        REDIS_HOST="10.8.0.1"
         REDIS_PORT=6379
         SUPERSET_ENV="production"
         SUPERSET_PORT=8088
@@ -40,10 +44,6 @@ EOH
         port_map {
           web = 8088
         }
-
-        volumes = [
-          "/var/nfs/:/var/nfs/",
-        ]
       }
 
       resources {
@@ -51,7 +51,6 @@ EOH
         memory = 1024
 
         network {
-          mbits = 10
           port  "web" {
             static = 8088
           }
