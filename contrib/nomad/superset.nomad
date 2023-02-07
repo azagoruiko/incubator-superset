@@ -4,7 +4,7 @@ job "superset-job" {
 
   constraint {
     attribute = "${node.class}"
-    value = "guestworker"
+    value = "storage"
   }
   group "superset-group" {
     count = 1
@@ -44,11 +44,15 @@ EOH
         port_map {
           web = 8088
         }
+
+        volumes = [
+          "/var/nfs/:/var/nfs/",
+        ]
       }
 
       resources {
-        cpu    = 700
-        memory = 1024
+        cpu    = 900
+        memory = 900
 
         network {
           port  "web" {
