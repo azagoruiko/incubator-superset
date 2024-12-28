@@ -36,7 +36,7 @@ EOH
         env = true
       }
       config {
-        image = "127.0.0.1:9999/docker/superset:0.0.13"
+        image = "10.8.0.5:5000/superset:0.0.17"
         privileged = true
         args = [
         ]

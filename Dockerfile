@@ -34,6 +34,7 @@ RUN cd /app \
         && pip install -r requirements.txt -r requirements-extra.txt \
         && pip install -e .
 
+RUN pip install 'trino[sqlalchemy]<1.0.0'
 
 FROM node:10-jessie AS superset-node
 

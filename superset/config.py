@@ -101,7 +101,7 @@ SUPERSET_WEBSERVER_PORT = 8088
 # [load balancer / proxy / envoy / kong / ...] timeout settings.
 # You should also make sure to configure your WSGI server
 # (gunicorn, nginx, apache, ...) timeout setting to be <= to this setting
-SUPERSET_WEBSERVER_TIMEOUT = 60
+SUPERSET_WEBSERVER_TIMEOUT = 600
 
 SUPERSET_DASHBOARD_POSITION_DATA_LIMIT = 65535
 CUSTOM_SECURITY_MANAGER = None
@@ -479,7 +479,7 @@ HTTP_HEADERS: Dict[str, Any] = {}
 DEFAULT_DB_ID = None
 
 # Timeout duration for SQL Lab synchronous queries
-SQLLAB_TIMEOUT = 30
+SQLLAB_TIMEOUT = 300
 
 # Timeout duration for SQL Lab query validation
 SQLLAB_VALIDATION_TIMEOUT = 10
@@ -494,7 +494,7 @@ SQLLAB_ASYNC_TIME_LIMIT_SEC = 60 * 60 * 6
 # Some databases support running EXPLAIN queries that allow users to estimate
 # query costs before they run. These EXPLAIN queries should have a small
 # timeout.
-SQLLAB_QUERY_COST_ESTIMATE_TIMEOUT = 10  # seconds
+SQLLAB_QUERY_COST_ESTIMATE_TIMEOUT = 100  # seconds
 
 # An instantiated derivative of werkzeug.contrib.cache.BaseCache
 # if enabled, it can be used to store the results of long-running queries

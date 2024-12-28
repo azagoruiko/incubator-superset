@@ -22,7 +22,7 @@ if [ "${#}" -ne 0 ]; then
 else
     gunicorn --bind  "0.0.0.0:${SUPERSET_PORT}" \
         --workers 2 \
-        --timeout 60 \
+        --timeout 600 \
         --limit-request-line 0 \
         --limit-request-field_size 0 \
         "${FLASK_APP}"
